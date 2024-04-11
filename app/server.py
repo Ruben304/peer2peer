@@ -3,6 +3,16 @@ import threading
 
 clients = []  # To keep track of connected clients
 
+# apply input sanitization
+def sanitize(message):
+    message = message.strip() # get rid of extra white spaces
+    message = message.replace('\n', '').replace('\r', '') # get rid of character controls 
+    maxLength = 400 # set a cap on message length size 
+    if len(message) > maxLength: # use part of message that is within cap
+        message = message[:maxLength]
+    return message
+
+
 def client_thread(conn, addr):
     print(f"Connected by {addr}")
     clients.append(conn)  # addds clients

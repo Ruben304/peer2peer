@@ -1,6 +1,15 @@
 import socket
 import threading
 
+# apply input sanitization
+def sanitize(message):
+    message = message.strip() # get rid of extra white spaces
+    message = message.replace('\n', '').replace('\r', '') # get rid of character controls 
+    maxLength = 400 # set a cap on message length size 
+    if len(message) > maxLength: # use part of message that is within cap
+        message = message[:maxLength]
+    return message
+
 def receive_messages(sock):
     while True:
         try:
@@ -22,6 +31,7 @@ def main():
 
     while True:
         message = input("Your message: ")
+        message = sanitize(message)
         if message.lower() == 'exit':
             break
         server.send(message.encode('utf-8'))
